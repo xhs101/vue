@@ -2,7 +2,7 @@
     <div id="app">
         <el-form>
             <div>
-                <h3 style="margin-top:200px">云相册</h3>
+                <h2 style="margin-top:200px">云相册</h2>
             </div>
             <el-form-item>
                 <el-input
@@ -103,7 +103,22 @@ export default {
         this.$message.error('验证码错误！')
         this.createCode()
         return false
-      };
+      }
+      var url = '/api//user/login'
+      this.$http.get(url, {params: {userName: this.userName, password: this.password}}).then(res => {
+        if (res != null) {
+          if (res.body.returnCode === 200) {
+            this.$message({
+              message: res.body.returnDesc,
+              type: 'success'
+            })
+          } else {
+            this.$message.error(res.body.returnDesc)
+          }
+        } else {
+          this.$message.error(res.error)
+        }
+      })
     }
     // regist () {
     //   this.$router.push({ path: '/regist' })
@@ -116,9 +131,10 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
+  background:#E6E6FA;
   margin-top: 60px;
+  height: 40%;
 }
 #code{
     font-size: 15px;

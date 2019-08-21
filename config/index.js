@@ -10,8 +10,6 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
-
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
     port: 1128, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
@@ -19,7 +17,19 @@ module.exports = {
     errorOverlay: true,
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
-
+    // 跨域
+    proxyTable: {
+      // 指定以/api开头的接口都走代理
+      '/api':{
+        // 需要连接后台接口的域名
+        target:'http://localhost:8088',
+        // 支持跨域
+        changeOrigin:true,
+        pathRewrite:{
+            '^/api':'/'
+        }
+    }
+    },
     // Use Eslint Loader?
     // If true, your code will be linted during bundling and
     // linting errors and warnings will be shown in the console.
