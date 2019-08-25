@@ -45,11 +45,13 @@
               </el-button>
             </el-form-item>
             <el-form-item>
+              <!-- <router-link :to="{name:'regist'}"> -->
               <el-button type="primary" style="width:20%" @click="submit" round>登录</el-button>
+              <!-- </router-link> -->
             </el-form-item>
             <el-form-item>
               <el-col>
-                <span style="margin-right: 120px;"><router-link to="www.baidu.com">忘记密码?</router-link></span>
+                <span style="margin-right: 120px;"><router-link to="/edit">忘记密码?</router-link></span>
                 <span><router-link to="/regist">点击注册账号</router-link></span>
               </el-col>
             </el-form-item>
@@ -61,7 +63,7 @@
 // 在全局定义验证码
 var code
 export default {
-  name: 'Login',
+  name: 'login',
   data () {
     return {
       userName: '',
@@ -98,22 +100,23 @@ export default {
       }
       if (this.password === null || this.password === '') {
         this.$message.error('密码不能为空，请输入密码')
+        return
       }
       if (this.seccode !== this.checkCode) {
         this.$message.error('验证码错误！')
         this.createCode()
         return false
       }
-      var url = '/api//user/login'
+      var url = '/api/user/login'
       this.$http.get(url, {params: {userName: this.userName, password: this.password}}).then(res => {
         if (res != null) {
           if (res.body.returnCode === 200) {
-            this.$message({
-              message: res.body.returnDesc,
-              type: 'success'
-            })
+            this.$message.success(res.body.returnDesc)
+            // 设置登录人信息，null当前页面关闭清除
+            this.$cookies.set('userName', this.userName, null)
+            this.$router.push({ path: '/Index' })
           } else {
-            this.$message.error(res.body.returnDesc)
+            this.$message.error(res.body.returnResult)
           }
         } else {
           this.$message.error(res.error)
@@ -131,8 +134,8 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  background:#E6E6FA;
+  color: #2d3a4b;
+  /* background:#E6E6FA; */
   margin-top: 60px;
   height: 40%;
 }
